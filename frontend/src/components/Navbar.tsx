@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+
 
 const navLinks = [
   { name: 'Rental', href: '#' },
@@ -12,6 +14,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
@@ -35,8 +38,18 @@ const Navbar = () => {
 
           {/* Auth Buttons (hidden on mobile) */}
           <div className="hidden md:flex items-center space-x-4 ml-auto">
-            <button className="px-4 py-2 rounded font-semibold text-gray-700 hover:text-blue-600 transition">Sign In</button>
-            <button className="px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Sign Up</button>
+            <button
+              className="px-4 py-2 rounded font-semibold text-gray-700 hover:text-blue-600 transition"
+              onClick={() => router.push('/signin')}
+            >
+              Sign In
+            </button>
+            <button
+              className="px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+              onClick={() => router.push('/signup')}
+            >
+              Sign Up
+            </button>
           </div>
 
           {/* Hamburger menu button (mobile only) */}
@@ -70,8 +83,24 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <button className="w-11/12 px-4 py-2 rounded font-semibold text-gray-700 hover:text-blue-600 transition">Sign In</button>
-            <button className="w-11/12 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Sign Up</button>
+            <button
+              className="w-11/12 px-4 py-2 rounded font-semibold text-gray-700 hover:text-blue-600 transition"
+              onClick={() => {
+                setMenuOpen(false);
+                router.push('/signin');
+              }}
+            >
+              Sign In
+            </button>
+            <button
+              className="w-11/12 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+              onClick={() => {
+                setMenuOpen(false);
+                router.push('/signup');
+              }}
+            >
+              Sign Up
+            </button>
           </div>
         </div>
       )}
