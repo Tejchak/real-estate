@@ -1,6 +1,6 @@
 # Real Estate Platform
 
-A scalable, cloud-native real estate marketplace built with modern enterprise architecture patterns, supporting multi-tenancy, real-time data processing, and roles for tenants and owners
+A scalable, cloud-native real estate marketplace, supporting multi-tenancy, real-time data processing, and roles for tenants and owners.
 This is currently in development right now. I am aiming for it to be enterprise level (tech stack and plans below)
 
 ## Architecture Overview
