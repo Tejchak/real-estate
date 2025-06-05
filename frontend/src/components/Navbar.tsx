@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 
-
 const navLinks = [
   { name: 'Rental', href: '#' },
   { name: 'Listing', href: '#' },
@@ -18,26 +17,31 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16 w-full">
-          {/* Logo/Brand */}
-          <a href="#" className="text-2xl font-bold text-blue-600 tracking-wide mr-8 select-none">PropertyPulse</a>
+      <div className="relative flex items-center justify-between w-full px-8 h-16">
+        {/* Left side - Logo */}
+        <div className="flex items-center gap-8">
+          <a href="#" className="text-2xl font-bold text-blue-600 tracking-wide select-none">
+            PropertyPulse
+          </a>
+        </div>
 
-          {/* Nav Links (hidden on mobile) */}
-          <div className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-gray-700 hover:text-blue-600 font-medium transition"
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
+        {/* Center - Nav Links (hidden on mobile) */}
+        <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center space-x-6">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              className="text-gray-700 hover:text-blue-600 font-medium transition"
+            >
+              {link.name}
+            </a>
+          ))}
+        </div>
 
+        {/* Right side - Auth Buttons and Mobile Menu */}
+        <div className="flex items-center gap-4">
           {/* Auth Buttons (hidden on mobile) */}
-          <div className="hidden md:flex items-center space-x-4 ml-auto">
+          <div className="hidden md:flex items-center space-x-4">
             <button
               className="px-4 py-2 rounded font-semibold text-gray-700 hover:text-blue-600 transition"
               onClick={() => router.push('/signin')}
@@ -53,7 +57,7 @@ const Navbar = () => {
           </div>
 
           {/* Hamburger menu button (mobile only) */}
-          <div className="md:hidden ml-auto flex items-center">
+          <div className="md:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="text-gray-700 hover:text-blue-600 focus:outline-none"
