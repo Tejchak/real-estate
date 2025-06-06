@@ -14,10 +14,10 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-4">
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
-          Start your journey to finding the perfect place to call home
+          Discover Your Next Home With Confidence
         </h1>
         <p className="text-lg md:text-2xl text-white mb-8 max-w-2xl drop-shadow">
-          Explore our wide range of rental properties tailored to fit your lifestyle and needs!
+          Browse curated rental listings designed to match your lifestyle, budget, and dreams. Find your perfect place today!
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <button className="px-6 py-3 bg-white text-gray-900 font-semibold rounded shadow hover:bg-gray-200 transition">Learn More</button>

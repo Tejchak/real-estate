@@ -1,6 +1,11 @@
+"use client";
 import React from 'react';
+import { useGetAuthUserQuery } from '@/state/api';
+import { useRouter } from 'next/navigation';
 
 const CallToActionSection = () => {
+  const { data: authUser } = useGetAuthUserQuery();
+  const router = useRouter();
   return (
     <section className="py-16 bg-blue-600 text-white text-center">
       <div className="max-w-3xl mx-auto px-4">
@@ -10,7 +15,14 @@ const CallToActionSection = () => {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button className="px-8 py-3 bg-white text-blue-600 font-semibold rounded shadow hover:bg-gray-100 transition">Learn More</button>
-          <button className="px-8 py-3 bg-gray-900 text-white font-semibold rounded shadow hover:bg-gray-800 transition">Sign Up</button>
+          {!authUser && (
+            <button
+              className="px-8 py-3 bg-gray-900 text-white font-semibold rounded shadow hover:bg-gray-800 transition"
+              onClick={() => router.push('/signup')}
+            >
+              Sign Up
+            </button>
+          )}
         </div>
       </div>
     </section>
