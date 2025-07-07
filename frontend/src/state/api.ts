@@ -61,16 +61,6 @@ export const api = createApi({
       }
     }),
 
-    updateTenantSettings: build.mutation<Tenant, {cognitoId:string} & Partial<Tenant>>({
-      query: ({cognitoId, ...updatedTenant}) => ({
-        url: `/tenants/${cognitoId}`,
-        method: "PUT",
-        body: updatedTenant,
-      }),
-      invalidatesTags: (result) => [{type: "Tenants", id: result?.id}],
-
-    }),
-
     updateManagerSettings: build.mutation<Manager, {cognitoId:string} & Partial<Manager>>({
       query: ({cognitoId, ...updatedManager}) => ({
         url: `/managers/${cognitoId}`,
@@ -113,9 +103,78 @@ export const api = createApi({
           : [{ type: "Properties", id: "LIST" }],
 
     }),
+
+    //tenant related endpoints
+    getTenant: build.query<Tenant, string>({
+      query: (cognitoId) => `tenants/${cognitoId}`,
+      providesTags: (result) => [{ type: "Tenants", id: result?.id }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to load tenant profile.",
+        });
+      },
+    }),
+
+
+    updateTenantSettings: build.mutation<Tenant, {cognitoId:string} & Partial<Tenant>>({
+      query: ({cognitoId, ...updatedTenant}) => ({
+        url: `/tenants/${cognitoId}`,
+        method: "PUT",
+        body: updatedTenant,
+      }),
+      invalidatesTags: (result) => [{type: "Tenants", id: result?.id}],
+
+    }),
+
+    addFavoriteProperty: build.mutation<
+    Tenant,
+    { cognitoId: string; propertyId: number }
+  >({
+    query: ({ cognitoId, propertyId }) => ({
+      url: `tenants/${cognitoId}/favorites/${propertyId}`,
+      method: "POST",
+    }),
+    invalidatesTags: (result) => [
+      { type: "Tenants", id: result?.id },
+      { type: "Properties", id: "LIST" },
+    ],
+    async onQueryStarted(_, { queryFulfilled }) {
+      await withToast(queryFulfilled, {
+        success: "Added to favorites!!",
+        error: "Failed to add to favorites",
+      });
+    },
+  }),
+
+  removeFavoriteProperty: build.mutation<
+    Tenant,
+    { cognitoId: string; propertyId: number }
+  >({
+    query: ({ cognitoId, propertyId }) => ({
+      url: `tenants/${cognitoId}/favorites/${propertyId}`,
+      method: "DELETE",
+    }),
+    invalidatesTags: (result) => [
+      { type: "Tenants", id: result?.id },
+      { type: "Properties", id: "LIST" },
+    ],
+    async onQueryStarted(_, { queryFulfilled }) {
+      await withToast(queryFulfilled, {
+        success: "Removed from favorites!",
+        error: "Failed to remove from favorites.",
+      });
+    },
+  }),
+
   }),
 });
 
 export const {
-  useGetAuthUserQuery, useUpdateTenantSettingsMutation, useUpdateManagerSettingsMutation, useGetPropertiesQuery
+  useGetAuthUserQuery, 
+  useUpdateTenantSettingsMutation, 
+  useUpdateManagerSettingsMutation, 
+  useGetPropertiesQuery,
+  useAddFavoritePropertyMutation,
+  useRemoveFavoritePropertyMutation,
+  useGetTenantQuery,
 } = api;
