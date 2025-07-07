@@ -21,7 +21,7 @@ export const api = createApi({
     }
   }),
   reducerPath: "api",
-  tagTypes: ["Managers", "Tenants", "Properties"],
+  tagTypes: ["Managers", "Tenants", "Properties", "PropertyDetails"],
   endpoints: (build) => ({
     getAuthUser: build.query<User, void>({
       queryFn: async(_, _queryApi, _extraOptions, fetchWithBQ) => {
@@ -104,6 +104,16 @@ export const api = createApi({
 
     }),
 
+    getProperty: build.query<Property, number>({
+      query: (id) => `properties/${id}`,
+      providesTags: (result, error, id) => [{ type: "PropertyDetails", id }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to load property details.",
+        });
+      },
+    }),
+
     //tenant related endpoints
     getTenant: build.query<Tenant, string>({
       query: (cognitoId) => `tenants/${cognitoId}`,
@@ -177,4 +187,5 @@ export const {
   useAddFavoritePropertyMutation,
   useRemoveFavoritePropertyMutation,
   useGetTenantQuery,
+  useGetPropertyQuery,
 } = api;
