@@ -28,7 +28,14 @@ const Residences = () => {
   });
 
   if (isLoading) return <Loading />;
-  if (error) return <div>Error loading current residences</div>;
+  if (error) {
+    return (
+      <div>
+        Error loading current residences:
+        <pre>{typeof error === "object" ? JSON.stringify(error, null, 2) : String(error)}</pre>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-container">

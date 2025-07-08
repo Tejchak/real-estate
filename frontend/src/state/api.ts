@@ -1,4 +1,4 @@
-import { Manager, Tenant } from "@/types/prismaTypes";
+import { Lease, Manager, Payment, Tenant } from "@/types/prismaTypes";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 import { createNewUserInDatabase, withToast } from "@/lib/utils";
@@ -21,7 +21,7 @@ export const api = createApi({
     }
   }),
   reducerPath: "api",
-  tagTypes: ["Managers", "Tenants", "Properties", "PropertyDetails"],
+  tagTypes: ["Managers", "Tenants", "Properties", "PropertyDetails", "Leases", "Payments"],
   endpoints: (build) => ({
     getAuthUser: build.query<User, void>({
       queryFn: async(_, _queryApi, _extraOptions, fetchWithBQ) => {
@@ -68,6 +68,29 @@ export const api = createApi({
         body: updatedManager,
       }),
       invalidatesTags: (result) => [{type: "Managers", id: result?.id}],
+    }),
+
+
+    //lease related endpoints
+
+    getLeases: build.query<Lease[], number>({
+      query: () => "leases",
+      providesTags: ["Leases"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to fetch leases.",
+        });
+      },
+    }),
+
+    getPayments: build.query<Payment[], number>({
+      query: (leaseId) => `leases/${leaseId}/payments`,
+      providesTags: ["Payments"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to fetch payment info.",
+        });
+      },
     }),
 
     //property related endpoints
@@ -207,4 +230,6 @@ export const {
   useGetTenantQuery,
   useGetPropertyQuery,
   useGetCurrentResidencesQuery,
+  useGetLeasesQuery,
+  useGetPaymentsQuery,
 } = api;

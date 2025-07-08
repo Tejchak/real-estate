@@ -61,7 +61,7 @@ export const updateTenant = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-export const getTenantProperties = async (req: Request, res: Response): Promise<void> => {
+export const getCurrentResidences = async (req: Request, res: Response): Promise<void> => {
   try {
     const {cognitoId} = req.params;
     const properties = await prisma.property.findMany({
