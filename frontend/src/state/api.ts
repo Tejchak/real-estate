@@ -125,6 +125,22 @@ export const api = createApi({
       },
     }),
 
+    getCurrentResidences: build.query<Property[], string>({
+      query: (cognitoId) => `tenants/${cognitoId}/current-residences`,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Properties" as const, id })),
+              { type: "Properties", id: "LIST" },
+            ]
+          : [{ type: "Properties", id: "LIST" }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to fetch current residences.",
+        });
+      },
+    }),
+
 
     updateTenantSettings: build.mutation<Tenant, {cognitoId:string} & Partial<Tenant>>({
       query: ({cognitoId, ...updatedTenant}) => ({
@@ -176,6 +192,8 @@ export const api = createApi({
     },
   }),
 
+
+
   }),
 });
 
@@ -188,4 +206,5 @@ export const {
   useRemoveFavoritePropertyMutation,
   useGetTenantQuery,
   useGetPropertyQuery,
+  useGetCurrentResidencesQuery,
 } = api;
