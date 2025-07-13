@@ -10,13 +10,23 @@ import { cleanParams } from "@/lib/utils";
 import { setFilters } from "@/state";
 import Map from "./Map";
 import Listings from "./Listings";
+import { useGetAuthUserQuery } from "@/state/api";
+import { useRouter } from "next/navigation";
 
 const SearchPage = () => {
+  const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const isFiltersFullOpen = useAppSelector(
     (state) => state.global.isFiltersFullOpen
   );
+
+  useEffect(() => {
+    if (!authLoading && !authUser) {
+      router.replace("/guest-search");
+    }
+  }, [authLoading, authUser, router]);
 
   useEffect(() => {
     const initialFilters = Array.from(searchParams.entries()).reduce(
@@ -37,6 +47,9 @@ const SearchPage = () => {
     const cleanedFilters = cleanParams(initialFilters);
     dispatch(setFilters(cleanedFilters));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (authLoading) return <>Loading...</>;
+  if (!authUser) return null;
 
   return (
     <div

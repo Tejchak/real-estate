@@ -86,7 +86,15 @@ const Navbar = () => {
           )}
         </div>
         {!isDashboardPage && (
-          authUser && authUser.userRole?.toLowerCase() === "tenant" && pathname !== "/search" ? (
+          !authUser ? (
+            <Button
+              variant="secondary"
+              className="hidden md:block bg-primary-50 text-primary-700 hover:bg-secondary-500 hover:text-primary-50"
+              onClick={() => router.push("/guest-search")}
+            >
+              Browse Properties
+            </Button>
+          ) : authUser.userRole?.toLowerCase() === "tenant" && pathname !== "/search" ? (
             <Button
               variant="secondary"
               className="hidden md:block bg-primary-50 text-primary-700 hover:bg-secondary-500 hover:text-primary-50"
