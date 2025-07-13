@@ -20,7 +20,7 @@ const Layout = ({ children}: {children: React.ReactNode }) => {
         userRole === 'manager' && pathname ==="/")
         {
           router.push(
-            "/mangers/properties",
+            "/managers/properties",
             {scroll: false}
           );
         } else {

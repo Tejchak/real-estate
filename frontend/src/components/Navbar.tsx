@@ -86,9 +86,19 @@ const Navbar = () => {
           )}
         </div>
         {!isDashboardPage && (
-          <p className="text-primary-200 hidden md:block">
-            Discover your perfect rental apartment with our advanced search
-          </p>
+          authUser && authUser.userRole?.toLowerCase() === "tenant" && pathname !== "/search" ? (
+            <Button
+              variant="secondary"
+              className="hidden md:block bg-primary-50 text-primary-700 hover:bg-secondary-500 hover:text-primary-50"
+              onClick={() => router.push("/search")}
+            >
+              Go to Search
+            </Button>
+          ) : (
+            <p className="text-primary-200 hidden md:block">
+              Discover your perfect rental apartment with our advanced search
+            </p>
+          )
         )}
         <div className="flex items-center gap-5">
           {authUser ? (
